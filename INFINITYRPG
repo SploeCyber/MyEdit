@@ -1,0 +1,240 @@
+repeat wait() until game:IsLoaded()
+if game.PlaceId == 380305410 or game.PlaceId == 2277629691 or game.PlaceId == 2277630015 or game.PlaceId == 4464235702 or game.PlaceId == 5857709791 or game.PlaceId == 6215448254 or game.PlaceId == 6655712327 then
+function hopserver()local v0=game.PlaceId;local v1={};local v2="";local v3=os.date("!*t").hour;local v4=false;local v5=pcall(function()v1=game:GetService("HttpService"):JSONDecode(readfile("NotSameServers.json"));end);if  not v5 then table.insert(v1,v3);writefile("NotSameServers.json",game:GetService("HttpService"):JSONEncode(v1));end function TPReturner()local v6;if (v2=="") then v6=game.HttpService:JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/"   .. v0   .. "/servers/Public?sortOrder=Asc&limit=100" ));else v6=game.HttpService:JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/"   .. v0   .. "/servers/Public?sortOrder=Asc&limit=100&cursor="   .. v2 ));end local v7="";if (v6.nextPageCursor and (v6.nextPageCursor~="null") and (v6.nextPageCursor~=nil)) then v2=v6.nextPageCursor;end local v8=0;for v9,v10 in pairs(v6.data) do local v11=true;v7=tostring(v10.id);if (tonumber(v10.maxPlayers)>tonumber(v10.playing)) then for v13,v14 in pairs(v1) do if (v8~=0) then if (v7==tostring(v14)) then v11=false;end elseif (tonumber(v3)~=tonumber(v14)) then local v15=pcall(function()delfile("NotSameServers.json");v1={};table.insert(v1,v3);end);end v8=v8 + 1 ;end if (v11==true) then table.insert(v1,v7);wait();pcall(function()writefile("NotSameServers.json",game:GetService("HttpService"):JSONEncode(v1));wait();game:GetService("TeleportService"):TeleportToPlaceInstance(v0,v7,game.Players.LocalPlayer);end);wait(4);end end end end function Teleport()while wait() do pcall(function()TPReturner();if (v2~="") then TPReturner();end end);end end Teleport();end
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/SmellLikeHacker/IDK/main/GUI56"))()
+local Window = library:CreateWindow("SLH Hub | "..game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name.." | V1.01")
+local Tab1 = Window:CreateTab("Main")
+local Sector1 = Tab1:CreateSector("Section1", "left")
+Sector1:AddToggle("Auto DamageRange", false, function(v)
+    _G.AutoRange = v
+end)
+arr = {}
+for i,v in pairs(game:GetService("ReplicatedStorage").GameAmmunition.Arrows:GetChildren()) do
+    table.insert(arr,v.Name)
+end
+Sector1:AddDropdown("SelectArrow",arr, false ,false , function(v)
+    _G.SelectArrow = v
+end)
+Sector1:AddToggle("Auto DamageMelee", false, function(v)
+    _G.AutoMelee = v
+end)
+local function getClosest()
+    local dist, thing = math.huge
+    for i,v in pairs(workspace.Mobs:GetDescendants()) do
+        if v.ClassName == "Part" and v.Name == "Head" then
+            local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).magnitude
+            if (mag < dist) then
+                dist = mag
+                thing = v.Parent
+            end
+        end
+    end
+    return thing
+end
+spawn(function()
+    pcall(function()
+        while wait(.1) do
+            if _G.AutoMelee == true then
+                pcall(function()
+                    game:GetService("ReplicatedStorage"):WaitForChild("GameRemotes"):WaitForChild("DamageMelee"):InvokeServer(getClosest())
+                end)
+            end
+        end
+    end)
+end)
+spawn(function()
+    pcall(function()
+        while wait(.1) do
+            if _G.AutoRange == true then
+                pcall(function()
+                    game:GetService("ReplicatedStorage"):WaitForChild("GameRemotes"):WaitForChild("DamageRanged"):InvokeServer(getClosest(),_G.SelectArrow)
+                end)
+            end
+        end
+    end)
+end)
+
+
+
+
+
+
+
+
+
+
+
+local TabSetting = Window:CreateTab("Setting/Misc")
+local Setting1 = TabSetting:CreateSector("Section1", "left")
+Setting1:AddTextbox("Speed" , "16" , function(w)
+    _G.Speed = w
+end)
+Setting1:AddTextbox("Jump" , "50" , function(w)
+    _G.Jump = w
+end)
+Setting1:AddToggle("WalkSpeed", false, function(t)
+    _G.WalkSpeed = t
+end)
+Setting1:AddToggle("JumpPower", false, function(t)
+    _G.JumpPower = t
+end)
+Setting1:AddToggle("Ctrl+ClickTP", false, function(t)
+    _G.CtrlClickTP = t
+end)
+Setting1:AddToggle("CloseGuiAfterExecute", false, function(o)
+    _G.CloseGuiAfterExecute = o
+end)
+Setting1:AddButton("Rejoin" , function()
+    game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId, game:GetService("Players").LocalPlayer)
+end)
+Setting1:AddButton("HopServer" , function()
+    hopserver()
+end)
+Setting1:AddButton("FireProximityPrompt" , function()
+    for i, v in pairs(game:GetService("Workspace"):GetDescendants()) do
+        if v:IsA("ProximityPrompt") then
+            fireproximityprompt(v)
+        end
+    end
+end)
+Setting1:AddButton("InstantProximityPrompt" , function()
+    game:GetService("ProximityPromptService").PromptButtonHoldBegan:Connect(function(prompt)
+        prompt.HoldDuration = 0
+    end)
+end)
+spawn(function()
+pcall(function()
+    while task.wait() do
+        pcall(function()
+            if _G.WalkSpeed then
+                pcall(function()
+                    game.Players.LocalPlayer.character.Humanoid.WalkSpeed = tonumber(_G.Speed)
+                end)
+            end
+        end)
+    end
+end)
+end)
+spawn(function()
+pcall(function()
+    while task.wait() do
+        pcall(function()
+            if _G.JumpPower then
+                pcall(function()
+                    game.Players.LocalPlayer.character.Humanoid.JumpPower = tonumber(_G.Jump)
+                end)
+            end
+        end)
+    end
+end)
+end)
+
+local UIS = game:GetService("UserInputService")
+local Player = game.Players.LocalPlayer
+local Mouse = Player:GetMouse()
+function GetCharacter()
+    return game.Players.LocalPlayer.Character
+    end
+    function Teleport(pos)
+    local Char = GetCharacter()
+    if Char then
+        Char:MoveTo(pos)
+    end
+end
+UIS.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 and UIS:IsKeyDown(Enum.KeyCode.LeftControl) and _G.CtrlClickTP == true then
+        Teleport(Mouse.Hit.p)
+    end
+end)
+
+local Setting2 = TabSetting:CreateSector("Section2", "Right")
+Setting2:AddDropdown("StatGuiPosition", {"Center","Left","Right"}, "Right", false, function(h)
+    game:GetService("CoreGui").StatBySmell.Frame.UIListLayout.HorizontalAlignment = h
+end)
+Setting2:AddDropdown("CreditGuiPosition", {"Center","Left","Right"}, "Left", false, function(h)
+    game:GetService("CoreGui").Credit.FRame.UIListLayout.HorizontalAlignment = h
+end)
+Setting2:AddToggle("StatGui", true, function(o)
+    game:GetService("CoreGui").StatBySmell.Enabled = o
+end)
+Setting2:AddToggle("CreditGui", true, function(o)
+    game:GetService("CoreGui").Credit.Enabled = o
+end)
+Setting2:AddToggle("RejoinIfGotKick", false, function(o)
+    _G.rejoinKick = o
+end)
+spawn(function()
+    getgenv().rejoin = game:GetService("CoreGui").RobloxPromptGui.promptOverlay.ChildAdded:Connect(function(Kick)
+        if ((Kick.Name == "ErrorPrompt") and Kick:FindFirstChild("MessageArea") and Kick.MessageArea:FindFirstChild("ErrorFrame")) then
+            if _G.rejoinKick == true then
+                game:GetService("TeleportService"):Teleport(game.PlaceId)
+            end
+        end
+    end)
+end)
+Setting2:AddToggle("BootsWhitescreen", false, function(o)
+    _G.BootsWhitescreen = o
+end)
+Setting2:AddButton("infiniteyield" , function()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
+end)
+Setting2:AddButton("ResetCamera" , function()
+    game:GetService("Workspace").CurrentCamera:Destroy()
+    wait(.1)
+    game:GetService("Workspace").CurrentCamera.CameraSubject = game:GetService("Players").LocalPlayer.Character.Humanoid
+    game:GetService("Workspace").CurrentCamera.CameraType = "Custom"
+    game:GetService("Players").LocalPlayer.CameraMinZoomDistance = .5
+    game:GetService("Players").LocalPlayer.CameraMaxZoomDistance = 100000
+    game:GetService("Players").LocalPlayer.CameraMode = "Classic"
+end)
+Setting2:AddButton("CopyDiscordLink" , function()
+    setclipboard("https://discord.gg/48geaWzacy")
+end)
+Setting2:AddButton("JoinDiscord" , function()
+    request = http_request or request or HttpPost or syn.request
+    request({Url = "http://127.0.0.1:6463/rpc?v=1",Method = "POST",Headers = {["Content-Type"] = "application/json",["origin"] = "https://discord.com",},Body = game:GetService("HttpService"):JSONEncode({["args"] = {["code"] = "48geaWzacy",},["cmd"] = "INVITE_BROWSER",["nonce"] = "."})})
+end)
+
+spawn(function()
+pcall(function()
+    while wait() do
+        pcall(function()
+            if _G.CloseGuiAfterExecute then
+                pcall(function()
+                    wait()
+                    for i,v in pairs(game:GetService("CoreGui"):GetChildren()) do
+                        if v:FindFirstChild("main") then
+                            v.main.Visible = not v.main.Visible
+                        end
+                    end
+                    wait(99999999999999999999999)
+                end)
+            end
+        end)
+    end
+end)
+end)
+spawn(function()
+pcall(function()
+    while wait() do
+        if _G.BootsWhitescreen then
+            wait()
+            local v0;local v1=game;local v2=v1.Workspace;local v3=v1.Lighting;local v4=v2.Terrain;v4.WaterWaveSize=0;v4.WaterWaveSpeed=0;v4.WaterReflectance=0;v4.WaterTransparency=0;v3.GlobalShadows=false;v3.FogEnd=8999999488;v3.Brightness=0;settings().Rendering.QualityLevel="Level01";for v18,v19 in pairs(v1:GetDescendants()) do if (v19:IsA("Part") or v19:IsA("Union") or v19:IsA("CornerWedgePart") or v19:IsA("TrussPart")) then v19.Material="Plastic";v19.Reflectance=0;elseif (v19:IsA("Decal") or (v19:IsA("Texture") and v0)) then v19.Transparency=1;elseif (v19:IsA("ParticleEmitter") or v19:IsA("Trail")) then v19.Lifetime=NumberRange.new(0);elseif v19:IsA("Explosion") then v19.BlastPressure=1;v19.BlastRadius=1;elseif (v19:IsA("Fire") or v19:IsA("SpotLight") or v19:IsA("Smoke")) then v19.Enabled=false;elseif v19:IsA("MeshPart") then v19.Material="Plastic";v19.Reflectance=0;v19.TextureID=10385902758728956;end end for v20,v21 in pairs(v3:GetChildren()) do if (v21:IsA("BlurEffect") or v21:IsA("SunRaysEffect") or v21:IsA("ColorCorrectionEffect") or v21:IsA("BloomEffect") or v21:IsA("DepthOfFieldEffect")) then v21.Enabled=false;end end local v13=game:GetService("UserInputService");local v14=game:GetService("RunService");local v15=function()v14:Set3dRenderingEnabled(false);return;end;local v16=function()v14:Set3dRenderingEnabled(true);return;end;local v17=function()v13.WindowFocusReleased:Connect(v15);v13.WindowFocused:Connect(v16);return;end;v17();
+            wait(99999999999999999999999)
+        end
+    end
+end)
+end)
+game:GetService("Players").LocalPlayer.Idled:connect(function()
+    game:GetService("VirtualUser"):CaptureController()
+    game:GetService("VirtualUser"):ClickButton2(Vector2.new())
+end)
+local config = library:ConfigSystem("Test")
+config:Load()
+while wait(1) do
+    pcall(function()
+        local config = library:ConfigSystem("Test")
+        config:Save()
+    end)
+end
+end
