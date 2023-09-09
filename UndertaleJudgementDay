@@ -1,0 +1,337 @@
+repeat wait() until game:IsLoaded()
+if game.PlaceId == 7150950346 then
+getgenv().HopServer=function()httprequest=(syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or request ;if httprequest then local v1={};local v2=httprequest({Url=string.format("https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Desc&limit=100",game.PlaceId)});local v3=game:GetService("HttpService"):JSONDecode(v2.Body);if (v3 and v3.data) then for v4,v5 in next,v3.data do if ((type(v5)=="table") and tonumber(v5.playing) and tonumber(v5.maxPlayers) and (v5.playing<(v5.maxPlayers-1)) and (v5.id~=JobId)) then table.insert(v1,1,v5.id);end end end if ( #v1>0) then game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId,v1[math.random(1, #v1)],game.Players.LocalPlayer);else return Notification(1,"SmellLikehacker Hub","Couldn't find a server",10);end end end;
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/SmellLikeHacker/IDK/main/GUI56"))()
+local Window = library:CreateWindow("SLH Hub | "..game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name.." | V1.01")
+local Tab = Window:CreateTab("Main")
+local Sector = Tab:CreateSector("Section1", "left")
+Sector:AddToggle("EXP Farm (BlueBerry)", false, function(v)
+    _G.FarmBlueBerry = v
+end)
+Sector:AddToggle("Collect BlackApple", false, function(v)
+    _G.BlackApple = v
+end)
+Sector:AddToggle("Show Dodges", false, function(v)
+    _G.ShowDodges = v
+end)
+spawn(function()
+    pcall(function()
+        while wait() do
+            pcall(function()
+                if _G.ShowDodges then
+                    pcall(function()
+                        for i,v in  pairs(workspace.TempFightStuff:GetChildren()) do 
+                            if v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Dodges") and not v.HumanoidRootPart:FindFirstChild("total") then
+                                createESP(v.HumanoidRootPart)
+                            end
+                        end
+                    end)
+                end
+            end)
+        end
+    end)
+end)
+spawn(function()
+    pcall(function()
+        while wait() do
+            pcall(function()
+                if _G.BlackApple then
+                    pcall(function()
+                        for i,v in pairs(workspace:GetChildren()) do
+                            if v.Name == "BlackApple" then
+                                fireclickdetector(v.HitBox.ClickDetector)
+                            end
+                        end
+                    end)
+                end
+            end)
+        end
+    end)
+end)
+spawn(function()
+    pcall(function()
+        while wait() do
+            pcall(function()
+                if _G.FarmBlueBerry then
+                    if workspace.Music.Lobby.Playing == true then
+                        if not workspace:FindFirstChild("FightPortal") then
+                            if not game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("ShopGUI") then
+                                fireclickdetector(workspace.Lobby.NPCS.Infected.ClickPart.ClickDetector)
+                            elseif game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("ShopGUI") then
+                                game:GetService("GuiService").SelectedObject = game:GetService("Players").LocalPlayer.PlayerGui.ShopGUI.Frame.ScrollingFrame.Blueberry
+                                wait(.1)
+                                game:GetService("VirtualInputManager"):SendKeyEvent(true, 13, false, game.Players.LocalPlayer.Character.HumanoidRootPart)
+                                wait(.1)
+                                game:GetService("VirtualInputManager"):SendKeyEvent(false, 13, false, game.Players.LocalPlayer.Character.HumanoidRootPart)
+                                wait(.1)
+                                game:GetService("GuiService").SelectedObject = nil
+                                wait(.1)
+                            end
+                        else
+                            firetouchinterest(workspace.FightPortal, game.Players.LocalPlayer.Character.HumanoidRootPart, 0)
+                            wait(.1)
+                            firetouchinterest(workspace.FightPortal, game.Players.LocalPlayer.Character.HumanoidRootPart, 1)
+                        end
+                    elseif workspace.Music.Lobby.Playing == false then
+                        if not game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool") then
+                            for i,v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+                                if v.ClassName == "Tool" then
+                                    v.Parent = game.Players.LocalPlayer.Character
+                                end
+                            end
+                        elseif game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool") then
+                            for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+                                if v.ClassName == "Tool" then
+                                    v:Activate()
+                                    for i,v in pairs(workspace.TempFightStuff:GetChildren()) do
+                                        if v:FindFirstChild("HumanoidRootPart") then
+                                            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,-0.1) * CFrame.Angles(math.rad(0),80,0)
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            end)
+        end
+    end)
+end)
+function createESP(v)
+	board = Instance.new("BillboardGui", v)
+	board.Name = "total"
+	board.Size = UDim2.new(1, 0, 1, 0)
+	board.StudsOffset = Vector3.new(-1, 0, 0)
+	board.AlwaysOnTop = true
+	bar = Instance.new("Frame", board)
+	bar.BackgroundColor3 = Color3.new(255, 0, 0)
+	bar.BorderSizePixel = 0
+	bar.Size = UDim2.new(3, 0, 0.8, 0)
+	bar.Name = "total2"
+	Dodges = Instance.new("Frame", bar)
+	Dodges.BackgroundColor3 = Color3.new(0, 255, 0)
+	Dodges.BorderSizePixel = 0
+	olddodge = tostring(v.Parent.Dodges.Value)
+	Dodges.Size = UDim2.new(v.Parent.Dodges.Value / olddodge, 0, 1, 0)
+	v.Parent.Dodges.Changed:Connect(function(property)
+		v.total.total2.Frame.Size = UDim2.new(v.Parent.Dodges.Value / olddodge, 0, 1, 0)
+	end)
+	olddodgee = tostring(v.Parent.Dodges.Value)
+	Dodge = Instance.new("TextLabel", bar)
+	Dodge.Size = UDim2.new(1,0,1,0)
+	Dodge.Text = tostring(v.Parent.Dodges.Value).."/"..olddodgee
+	Dodge.TextSize = 20
+	Dodge.BackgroundTransparency = 1
+	v.Parent.Dodges.Changed:Connect(function(property)
+		Dodge.Text = tostring(v.Parent.Dodges.Value).."/"..olddodgee
+	end)
+end
+
+
+
+
+
+
+
+
+
+
+
+local Tab = Window:CreateTab("Setting/Misc")
+local Sector = Tab:CreateSector("Section1", "left")
+Sector:AddTextbox("Speed" , "16" , function(w)
+    _G.Speed = w
+end)
+Sector:AddTextbox("Jump" , "50" , function(w)
+    _G.Jump = w
+end)
+Sector:AddToggle("WalkSpeed", false, function(t)
+    _G.WalkSpeed = t
+end)
+Sector:AddToggle("JumpPower", false, function(t)
+    _G.JumpPower = t
+end)
+Sector:AddToggle("CtrlClickTP", false, function(t)
+    _G.CtrlClickTP = t
+end)
+Sector:AddButton("Rejoin" , function()
+    game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId, game:GetService("Players").LocalPlayer)
+end)
+Sector:AddButton("HopServer" , function()
+    HopServer()
+end)
+Sector:AddButton("ResetCamera" , function()
+    game:GetService("Workspace").CurrentCamera:Destroy()
+    wait(.1)
+    game:GetService("Workspace").CurrentCamera.CameraSubject = game:GetService("Players").LocalPlayer.Character.Humanoid
+    game:GetService("Workspace").CurrentCamera.CameraType = "Custom"
+    game:GetService("Players").LocalPlayer.CameraMinZoomDistance = .5
+    game:GetService("Players").LocalPlayer.CameraMaxZoomDistance = 100000
+    game:GetService("Players").LocalPlayer.CameraMode = "Classic"
+end)
+Sector:AddButton("InstantProximityPrompt" , function()
+    game:GetService("ProximityPromptService").PromptButtonHoldBegan:Connect(function(prompt)
+        prompt.HoldDuration = 0
+    end)
+end)
+spawn(function()
+    pcall(function()
+        while task.wait() do
+            pcall(function()
+                if _G.WalkSpeed then
+                    pcall(function()
+                        game.Players.LocalPlayer.character.Humanoid.WalkSpeed = tonumber(_G.Speed)
+                    end)
+                end
+            end)
+        end
+    end)
+end)
+spawn(function()
+    pcall(function()
+        while task.wait() do
+            pcall(function()
+                if _G.JumpPower then
+                    pcall(function()
+                        game.Players.LocalPlayer.character.Humanoid.JumpPower = tonumber(_G.Jump)
+                    end)
+                end
+            end)
+        end
+    end)
+end)
+
+local UIS = game:GetService("UserInputService")
+local Player = game.Players.LocalPlayer
+local Mouse = Player:GetMouse()
+function GetCharacter()
+    return game.Players.LocalPlayer.Character
+    end
+    function Teleport(pos)
+    local Char = GetCharacter()
+    if Char then
+        Char:MoveTo(pos)
+    end
+end
+UIS.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 and UIS:IsKeyDown(Enum.KeyCode.LeftControl) and _G.CtrlClickTP == true then
+        Teleport(Mouse.Hit.p)
+    end
+end)
+
+local Sector = Tab:CreateSector("Section2", "Right")
+Sector:AddKeybind("Keybind GUI", "Insert",true, function()
+    for i, v in pairs(game:GetService("CoreGui"):GetChildren()) do
+        if v:FindFirstChild("main") then
+            v.main.Visible = not v.main.Visible;
+        end
+    end
+end)
+Sector:AddToggle("CloseGuiAfterExecute", false, function(o)
+    _G.CloseGuiAfterExecute = o
+end)
+Sector:AddToggle("RejoinAfterKick", false, function(o)
+    _G.rejoinKick = o
+end)
+spawn(function()
+    getgenv().rejoin = game:GetService("CoreGui").RobloxPromptGui.promptOverlay.ChildAdded:Connect(function(Kick)
+        if ((Kick.Name == "ErrorPrompt") and Kick:FindFirstChild("MessageArea") and Kick.MessageArea:FindFirstChild("ErrorFrame")) then
+            if _G.rejoinKick == true then
+                game:GetService("TeleportService"):Teleport(game.PlaceId)
+            end
+        end
+    end)
+end)
+Sector:AddToggle("WhiteScreen", false, function(o)
+    _G.AFKMode = o
+end)
+Sector:AddButton("infiniteyield" , function()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
+end)
+Sector:AddButton("DarkDex" , function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/infyiff/backup/main/dex.lua", true))()
+end)
+Sector:AddButton("RemoteSpy" , function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/SmellLikeHacker/IDK/main/RemoteSpy", true))()
+end)
+Sector:AddButton("CopyDiscordLink" , function()
+    setclipboard("https://discord.gg/48geaWzacy")
+end)
+Sector:AddButton("JoinDiscord" , function()
+    request = http_request or request or HttpPost or syn.request
+    request({Url = "http://127.0.0.1:6463/rpc?v=1",Method = "POST",Headers = {["Content-Type"] = "application/json",["origin"] = "https://discord.com",},Body = game:GetService("HttpService"):JSONEncode({["args"] = {["code"] = "48geaWzacy",},["cmd"] = "INVITE_BROWSER",["nonce"] = "."})})
+end)
+Sector:AddButton("SUPER SECRET BUTTON" , function()
+    spawn(function()
+        local soundId = "rbxassetid://6454805792"
+        local sound = Instance.new("Sound")
+        sound.SoundId = soundId
+        sound.Volume = 10
+        sound.Looped = true
+        sound.Parent = game.Players.LocalPlayer.Character
+        sound:Play()
+        wait(60)
+        sound:Destroy()
+    end)
+end)
+spawn(function()
+    pcall(function()
+        while task.wait() do
+            pcall(function()
+                game:GetService("Players").LocalPlayer.DevCameraOcclusionMode = "Invisicam"
+                game:GetService("Players").LocalPlayer.CameraMaxZoomDistance = 100000
+            end)
+        end
+    end)
+end)
+spawn(function()
+    pcall(function()
+        while wait() do
+            pcall(function()
+                if _G.CloseGuiAfterExecute then
+                    pcall(function()
+                        wait()
+                        for i,v in pairs(game:GetService("CoreGui"):GetChildren()) do
+                            if v:FindFirstChild("main") then
+                                v.main.Visible = not v.main.Visible
+                            end
+                        end
+                        wait(9e9)
+                    end)
+                end
+            end)
+        end
+    end)
+end)
+spawn(function()
+    pcall(function()
+        while wait() do
+            pcall(function()
+                if _G.AFKMode == true then
+                    game:GetService("RunService"):Set3dRenderingEnabled(false)
+                    pcall(function()
+                        setfpscap(20)
+                    end)
+                    repeat wait() until _G.AFKMode == false
+                elseif _G.AFKMode == false then
+                    game:GetService("RunService"):Set3dRenderingEnabled(true)
+                    pcall(function()
+                        setfpscap(60)
+                    end)
+                    repeat wait() until _G.AFKMode == false
+                end
+            end)
+        end
+    end)
+end)
+game:GetService("Players").LocalPlayer.Idled:connect(function()
+    game:GetService("VirtualUser"):CaptureController()
+    game:GetService("VirtualUser"):ClickButton2(Vector2.new())
+end)
+library:ConfigSystem("UndertaleJudgementDay"):Load()
+while wait(1) do
+    pcall(function()
+        library:ConfigSystem("UndertaleJudgementDay"):Save()
+    end)
+end
+end
