@@ -14,6 +14,36 @@ end)
 Sector:AddToggle("Show Dodges", false, function(v)
     _G.ShowDodges = v
 end)
+function createESP(v)
+	board = Instance.new("BillboardGui", v)
+	board.Name = "total"
+	board.Size = UDim2.new(1, 0, 1, 0)
+	board.StudsOffset = Vector3.new(-1, 0, 0)
+	board.AlwaysOnTop = true
+	bar = Instance.new("Frame", board)
+	bar.BackgroundColor3 = Color3.new(255, 0, 0)
+	bar.BorderSizePixel = 0
+	bar.Size = UDim2.new(3, 0, 0.8, 0)
+	bar.Name = "total2"
+    olddodge = tostring(v.Parent.Dodges.Value)
+	Dodges = Instance.new("Frame", bar)
+	Dodges.BackgroundColor3 = Color3.new(0, 255, 0)
+	Dodges.BorderSizePixel = 0
+	Dodges.Size = UDim2.new(v.Parent.Dodges.Value / olddodge, 0, 1, 0)
+	v.Parent.Dodges.Changed:Connect(function(property)
+		v.total.total2.Frame.Size = UDim2.new(v.Parent.Dodges.Value / olddodge, 0, 1, 0)
+	end)
+	Dodge = Instance.new("TextLabel", Dodges)
+	Dodge.Size = UDim2.new(1,0,1,0)
+	Dodge.Text = tostring(v.Parent.Dodges.Value)
+	Dodge.TextSize = 20
+	Dodge.BackgroundTransparency = 1
+	Dodge.TextScaled = true
+	Dodge.TextWrapped = true
+	v.Parent.Dodges.Changed:Connect(function(property)
+		Dodge.Text = tostring(v.Parent.Dodges.Value)
+	end)
+end
 spawn(function()
     pcall(function()
         while wait() do
@@ -97,35 +127,7 @@ spawn(function()
         end
     end)
 end)
-function createESP(v)
-	board = Instance.new("BillboardGui", v)
-	board.Name = "total"
-	board.Size = UDim2.new(1, 0, 1, 0)
-	board.StudsOffset = Vector3.new(-1, 0, 0)
-	board.AlwaysOnTop = true
-	bar = Instance.new("Frame", board)
-	bar.BackgroundColor3 = Color3.new(255, 0, 0)
-	bar.BorderSizePixel = 0
-	bar.Size = UDim2.new(3, 0, 0.8, 0)
-	bar.Name = "total2"
-	Dodges = Instance.new("Frame", bar)
-	Dodges.BackgroundColor3 = Color3.new(0, 255, 0)
-	Dodges.BorderSizePixel = 0
-	olddodge = tostring(v.Parent.Dodges.Value)
-	Dodges.Size = UDim2.new(v.Parent.Dodges.Value / olddodge, 0, 1, 0)
-	v.Parent.Dodges.Changed:Connect(function(property)
-		v.total.total2.Frame.Size = UDim2.new(v.Parent.Dodges.Value / olddodge, 0, 1, 0)
-	end)
-	olddodgee = tostring(v.Parent.Dodges.Value)
-	Dodge = Instance.new("TextLabel", bar)
-	Dodge.Size = UDim2.new(1,0,1,0)
-	Dodge.Text = tostring(v.Parent.Dodges.Value).."/"..olddodgee
-	Dodge.TextSize = 20
-	Dodge.BackgroundTransparency = 1
-	v.Parent.Dodges.Changed:Connect(function(property)
-		Dodge.Text = tostring(v.Parent.Dodges.Value).."/"..olddodgee
-	end)
-end
+
 
 
 
