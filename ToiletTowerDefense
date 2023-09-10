@@ -1,0 +1,46 @@
+repeat wait(1) until game:IsLoaded()
+if game.PlaceId == 13775256536 or game.PlaceId == 14082129854 or game.PlaceId == 14264219661 or game.PlaceId == 14682939953 then
+    spawn(function()
+        pcall(function()
+            while wait(.2) do
+                pcall(function()
+                    if game.PlaceId == 13775256536 then
+                        if game:GetService("Players").LocalPlayer.PlayerGui.Lobby.QueueFrame.Visible == false then
+                            for i,v in pairs(workspace.Lifts:GetChildren()) do
+                                if v.Name == "ToiletHQ" and v.Base.StatusGui.PlayersCount.Text == "0/5" then
+                                    if game:GetService("Players").LocalPlayer.PlayerGui.Lobby.QueueFrame.Visible == false then
+                                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Base.CFrame
+                                    end
+                                end
+                            end
+                        elseif game:GetService("Players").LocalPlayer.PlayerGui.Lobby.QueueFrame.Visible == true then
+                            game:GetService("GuiService").SelectedObject = game:GetService("Players").LocalPlayer.PlayerGui.Lobby.QueueFrame.Start
+                            wait(.1)
+                            game:GetService("VirtualInputManager"):SendKeyEvent(true, 13, false, game.Players.LocalPlayer.Character.HumanoidRootPart)
+                            wait(.1)
+                            game:GetService("VirtualInputManager"):SendKeyEvent(false, 13, false, game.Players.LocalPlayer.Character.HumanoidRootPart)
+                            wait(.1)
+                            game:GetService("GuiService").SelectedObject = nil
+                            wait(.1)
+                        end
+                    elseif game.PlaceId == 14082129854 then
+                        if tostring(game:GetService("Players").LocalPlayer.PlayerGui.Match.TopFrame.AutoSkip.OnAndOff.BackgroundColor3) == "1, 0, 0" then
+                            game:GetService("GuiService").SelectedObject = game:GetService("Players").LocalPlayer.PlayerGui.Match.TopFrame.AutoSkip.OnAndOff
+                            wait(.1)
+                            game:GetService("VirtualInputManager"):SendKeyEvent(true, 13, false, game.Players.LocalPlayer.Character.HumanoidRootPart)
+                            wait(.1)
+                            game:GetService("VirtualInputManager"):SendKeyEvent(false, 13, false, game.Players.LocalPlayer.Character.HumanoidRootPart)
+                            wait(.1)
+                            game:GetService("GuiService").SelectedObject = nil
+                            wait(.1)
+                        end
+                    end
+                end)
+            end
+        end)
+    end)
+    game:GetService("Players").LocalPlayer.Idled:connect(function()
+        game:GetService("VirtualUser"):CaptureController()
+        game:GetService("VirtualUser"):ClickButton2(Vector2.new())
+    end)
+end
