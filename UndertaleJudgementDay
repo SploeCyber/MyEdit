@@ -1,10 +1,10 @@
 repeat wait() until game:IsLoaded()
-if game.PlaceId == 7150950346 then
+if game.PlaceId == 7150950346 or game.PlaceId == 4994661268 then
 getgenv().HopServer=function()httprequest=(syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or request ;if httprequest then local v1={};local v2=httprequest({Url=string.format("https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Desc&limit=100",game.PlaceId)});local v3=game:GetService("HttpService"):JSONDecode(v2.Body);if (v3 and v3.data) then for v4,v5 in next,v3.data do if ((type(v5)=="table") and tonumber(v5.playing) and tonumber(v5.maxPlayers) and (v5.playing<(v5.maxPlayers-1)) and (v5.id~=JobId)) then table.insert(v1,1,v5.id);end end end if ( #v1>0) then game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId,v1[math.random(1, #v1)],game.Players.LocalPlayer);else return Notification(1,"SmellLikehacker Hub","Couldn't find a server",10);end end end;
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/SmellLikeHacker/IDK/main/GUI56"))()
 local Window = library:CreateWindow("SLH Hub | "..game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name.." | V1.01")
 local Tab = Window:CreateTab("Main")
-local Sector = Tab:CreateSector("Section1", "left")
+local Sector = Tab:CreateSector("Section1", "Right")
 Sector:AddToggle("EXP Farm (BlueBerry)", false, function(v)
     _G.FarmBlueBerry = v
 end)
@@ -13,6 +13,13 @@ Sector:AddToggle("Collect BlackApple", false, function(v)
 end)
 Sector:AddToggle("Show Dodges", false, function(v)
     _G.ShowDodges = v
+end)
+local Sector = Tab:CreateSector("Section1", "left")
+Sector:AddToggle("Auto kill your self", false, function(v)
+    _G.killyourself = v
+end)
+Sector:AddToggle("AutoJoinDustDust", false, function(v)
+    _G.goDustDust = v
 end)
 function createESP(v)
 	board = Instance.new("BillboardGui", v)
@@ -82,8 +89,47 @@ spawn(function()
     pcall(function()
         while wait() do
             pcall(function()
-                if _G.FarmBlueBerry then
-                    if workspace.Music.Lobby.Playing == true then
+                if _G.killyourself then
+                    pcall(function()
+                        if game.Players.LocalPlayer.Character:FindFirstChild("InGame") then
+                            game.Players.LocalPlayer.Character.Humanoid.Health = -1
+                            wait()
+                            game.Players.LocalPlayer.Character.Humanoid.Health = 1
+                        end
+                    end)
+                end
+            end)
+        end
+    end)
+end)
+spawn(function()
+    pcall(function()
+        while wait(1) do
+            pcall(function()
+                if _G.goDustDust then
+                    pcall(function()
+                        fireclickdetector(workspace.Lobby.DustDust.ClickPart.ClickDetector)
+                    end)
+                end
+            end)
+        end
+    end)
+end)
+spawn(function()
+    pcall(function()
+        while wait() do
+            pcall(function()
+                game:GetService("ReplicatedStorage"):WaitForChild("LoadCharacter"):FireServer()
+            end)
+        end
+    end)
+end)
+spawn(function()
+    pcall(function()
+        while wait() do
+            pcall(function()
+                if _G.FarmBlueBerry == true then
+                    if not workspace.TempFightStuff:FindFirstChild("Blueberry") or workspace.TempFightStuff.Blueberry.Humanoid.Health <= 0 then
                         if not workspace:FindFirstChild("FightPortal") then
                             if not game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("ShopGUI") then
                                 fireclickdetector(workspace.Lobby.NPCS.Infected.ClickPart.ClickDetector)
@@ -97,12 +143,12 @@ spawn(function()
                                 game:GetService("GuiService").SelectedObject = nil
                                 wait(.1)
                             end
-                        else
+                        else    
                             firetouchinterest(workspace.FightPortal, game.Players.LocalPlayer.Character.HumanoidRootPart, 0)
                             wait(.1)
                             firetouchinterest(workspace.FightPortal, game.Players.LocalPlayer.Character.HumanoidRootPart, 1)
                         end
-                    elseif workspace.Music.Lobby.Playing == false then
+                    else
                         if not game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool") then
                             for i,v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
                                 if v.ClassName == "Tool" then
@@ -110,14 +156,10 @@ spawn(function()
                                 end
                             end
                         elseif game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool") then
-                            for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+                            for _,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
                                 if v.ClassName == "Tool" then
                                     v:Activate()
-                                    for i,v in pairs(workspace.TempFightStuff:GetChildren()) do
-                                        if v:FindFirstChild("HumanoidRootPart") then
-                                            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,0,-0.1) * CFrame.Angles(math.rad(0),80,0)
-                                        end
-                                    end
+                                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame =  workspace.TempFightStuff.Blueberry.HumanoidRootPart.CFrame * CFrame.new(0,0,-0.1) * CFrame.Angles(math.rad(0),80,0)
                                 end
                             end
                         end
