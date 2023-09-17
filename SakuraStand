@@ -43,12 +43,6 @@ Sector:AddToggle("???", false, function(v)
 end)
 
 local Sector = Tab:CreateSector("Item", "Right")
-Sector:AddDropdown("Select ignore Item", {"Box","Chest"} , {"Chest"},  true, function(v)
-    _G.SelectItem = v
-end)
-Sector:AddToggle("Open chest if have key", false, function(v)
-    _G.AutoChest = v
-end)
 Sector:AddToggle("AutoCollect", false, function(v)
     _G.Collectitem = v
 end)
@@ -73,7 +67,7 @@ local function getClosestItem()
 				dist = mag 
 				thing = v
 			end
-        elseif not table.find(_G.SelectItem,v.Name) and v:FindFirstChildWhichIsA("ProximityPrompt").Enabled == true and v.Position.Y > -200 then
+        elseif v.Name ~= "Chest" and v:FindFirstChildWhichIsA("ProximityPrompt").Enabled == true and v.Position.Y > -200 then
 			local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).magnitude
 			if mag < dist then
 				dist = mag 
@@ -240,17 +234,21 @@ spawn(function()
 					if game.Players.LocalPlayer.Character.CDValues:FindFirstChild("G_Cooldown") then
                         for i, v in next, workspace.Item:GetChildren() do
                             if game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Chest Key") and v:FindFirstChildWhichIsA("ProximityPrompt").Enabled == true and v.Position.Y > -200 and game.Players.LocalPlayer.Character.CDValues:FindFirstChild("G_Cooldown") then
-                                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame * CFrame.new(0,5,0)
-                                v:FindFirstChildWhichIsA("ProximityPrompt").HoldDuration = 0
-                                wait(1)
-                                fireproximityprompt(v:FindFirstChildWhichIsA("ProximityPrompt"))
-                                wait(1)
+                                if _G.A == true then
+                                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame * CFrame.new(0,5,0)
+                                    v:FindFirstChildWhichIsA("ProximityPrompt").HoldDuration = 0
+                                    wait(1)
+                                    fireproximityprompt(v:FindFirstChildWhichIsA("ProximityPrompt"))
+                                    wait(1)
+                                end
                             elseif v.Name ~= "Chest" and v:FindFirstChildWhichIsA("ProximityPrompt").Enabled == true and v.Position.Y > -200 and game.Players.LocalPlayer.Character.CDValues:FindFirstChild("G_Cooldown") then
-                                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame * CFrame.new(0,5,0)
-                                v:FindFirstChildWhichIsA("ProximityPrompt").HoldDuration = 0
-                                wait(1)
-                                fireproximityprompt(v:FindFirstChildWhichIsA("ProximityPrompt"))
-                                wait(1)
+                                if _G.A == true then
+                                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame * CFrame.new(0,5,0)
+                                    v:FindFirstChildWhichIsA("ProximityPrompt").HoldDuration = 0
+                                    wait(1)
+                                    fireproximityprompt(v:FindFirstChildWhichIsA("ProximityPrompt"))
+                                    wait(1)
+                                end
                             end
                         end
                     elseif not game.Players.LocalPlayer.Character.CDValues:FindFirstChild("G_Cooldown") then
