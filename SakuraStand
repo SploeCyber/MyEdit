@@ -1,0 +1,379 @@
+repeat wait() until game:IsLoaded()
+if game.PlaceId == 8534845015 then
+getgenv().HopServer=function()httprequest=(syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or request ;if httprequest then local v1={};local v2=httprequest({Url=string.format("https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Desc&limit=100",game.PlaceId)});local v3=game:GetService("HttpService"):JSONDecode(v2.Body);if (v3 and v3.data) then for v4,v5 in next,v3.data do if ((type(v5)=="table") and tonumber(v5.playing) and tonumber(v5.maxPlayers) and (v5.playing<(v5.maxPlayers-1)) and (v5.id~=JobId)) then table.insert(v1,1,v5.id);end end end if ( #v1>0) then game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId,v1[math.random(1, #v1)],game.Players.LocalPlayer);else return Notification(1,"SmellLikehacker Hub","Couldn't find a server",10);end end end;
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/SmellLikeHacker/IDK/main/GUI56"))()
+local Window = library:CreateWindow("SLH Hub | "..game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name.." | V1.01")
+local Tab = Window:CreateTab("Main")
+local Sector = Tab:CreateSector("Section1", "left")
+Sector:AddToggle("Auto UpgradeMastery", false, function(v)
+    _G.UpgradeMas = v
+end)
+Sector:AddToggle("Owner ID", false, function(v)
+    _G.OwnerID = v
+end)
+Sector:AddToggle("Stupid ID", false, function(v)
+    _G.MostTP = v
+end)
+
+local Sector = Tab:CreateSector("Item", "Right")
+Sector:AddDropdown("Select ignore Item", {"Box","Chest"} , {"Chest"},  true, function(v)
+    _G.SelectItem = v
+end)
+Sector:AddToggle("Open chest if have key", false, function(v)
+    _G.AutoChest = v
+end)
+Sector:AddToggle("AutoCollect", false, function(v)
+    _G.Collectitem = v
+end)
+local it = {}
+for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui.SellGUI.Outer.Inner.Inner:GetChildren()) do
+	if v.ClassName == "ImageButton" then
+		table.insert(it,v["Text"].Text)
+	end
+end
+Sector:AddDropdown("Select Sell Item", it ,false,  true, function(v)
+    _G.SelectSellItem = v
+end)
+Sector:AddToggle("AutoSellItem", false, function(v)
+    _G.AutoSellItem = v
+end)
+local function getClosestItem()
+	local dist, thing = math.huge
+	for i, v in next, workspace.Item:GetChildren() do
+		if _G.AutoChest == true and game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Chest Key") and v:FindFirstChildWhichIsA("ProximityPrompt").Enabled == true and v.Position.Y > -200 then
+			local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).magnitude
+			if mag < dist then
+				dist = mag 
+				thing = v
+			end
+        elseif not table.find(_G.SelectItem,v.Name) and v:FindFirstChildWhichIsA("ProximityPrompt").Enabled == true and v.Position.Y > -200 then
+			local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).magnitude
+			if mag < dist then
+				dist = mag 
+				thing = v
+			end
+		end
+	end
+return thing
+end
+spawn(function()
+	pcall(function()
+		while task.wait() do
+            pcall(function()
+                if _G.MostTP then
+                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-521, -31, 1658)
+                end
+            end)
+		end
+	end)
+end)
+spawn(function()
+	pcall(function()
+		while task.wait() do
+            pcall(function()
+                if _G.OwnerID then
+                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-521, -31, 1662)
+                    game:GetService("VirtualInputManager"):SendMouseButtonEvent(1, 1, 0, true, game, 1)
+                    game:GetService("VirtualInputManager"):SendMouseButtonEvent(1, 1, 0, false, game, 1)
+                end
+            end)
+		end
+	end)
+end)
+spawn(function()
+	pcall(function()
+		while wait() do
+            pcall(function()
+                if game:GetService("Players").LocalPlayer.Data.Played.Value == false then
+                    game:GetService("GuiService").SelectedObject = game:GetService("Players").LocalPlayer.PlayerGui.FrontMenu.Play
+                    wait(.1)
+                    game:GetService("VirtualInputManager"):SendKeyEvent(true, 13, false, game.Players.LocalPlayer.Character.HumanoidRootPart)
+                    wait(.1)
+                    game:GetService("VirtualInputManager"):SendKeyEvent(false, 13, false, game.Players.LocalPlayer.Character.HumanoidRootPart)
+                    wait(.1)
+                    game:GetService("GuiService").SelectedObject = nil
+                    wait(.1)
+                end
+            end)
+		end
+	end)
+end)
+spawn(function()
+	pcall(function()
+		while wait() do
+			if _G.Collectitem == true then
+                pcall(function()
+                    if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - getClosestItem().Position).magnitude < getClosestItem():FindFirstChildWhichIsA("ProximityPrompt").MaxActivationDistance then
+                        getClosestItem():FindFirstChildWhichIsA("ProximityPrompt").HoldDuration = 0
+                        fireproximityprompt(getClosestItem():FindFirstChildWhichIsA("ProximityPrompt"))
+                    elseif (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - getClosestItem().Position).magnitude > getClosestItem():FindFirstChildWhichIsA("ProximityPrompt").MaxActivationDistance+7 then
+                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getClosestItem().CFrame * CFrame.new(0,0,getClosestItem():FindFirstChildWhichIsA("ProximityPrompt").MaxActivationDistance+6)
+                    elseif (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - getClosestItem().Position).magnitude <= getClosestItem():FindFirstChildWhichIsA("ProximityPrompt").MaxActivationDistance+7 then
+                        game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getClosestItem().Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/tonumber(5), Enum.EasingStyle.Linear),{CFrame = getClosestItem().CFrame}):Play()
+                    end
+                end)
+			end
+		end
+	end)
+end)
+spawn(function()
+	pcall(function()
+		while task.wait() do
+			if _G.Collectitem == true then
+                task.spawn(function()
+                    pcall(function()
+                        local BeenASecond, V3 = false, Vector3.new(0, 0, 0)
+                        for _, v in ipairs(game.Players.LocalPlayer.Character:GetDescendants()) do
+                            if v.IsA(v, "BasePart") then
+                                v.Velocity, v.RotVelocity = V3, V3
+                            end
+                        end
+                    end)
+                end)
+                task.spawn(function()
+                    pcall(function()
+                        for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+                            if v:IsA("BasePart") then
+                                v.CanCollide = false
+                            end
+                        end
+                    end)
+                end)
+			end
+		end
+	end)
+end)
+spawn(function()
+	pcall(function()
+		while wait() do
+			if _G.AutoSellItem then
+				pcall(function()
+					for i,v in pairs(_G.SelectSellItem) do
+                        if game.Players.LocalPlayer.Backpack:FindFirstChild(v) then
+						    game:GetService("ReplicatedStorage"):WaitForChild("GlobalUsedRemotes"):WaitForChild("SellItem"):FireServer(v)
+                        end
+					end
+				end)
+			end
+		end
+	end)
+end)
+
+spawn(function()
+	pcall(function()
+		while wait(1) do
+			if _G.UpgradeMas then
+				pcall(function()
+					game:GetService("ReplicatedStorage"):WaitForChild("GlobalUsedRemotes"):WaitForChild("UpgradeMas"):FireServer()
+				end)
+			end
+		end
+	end)
+end)
+
+
+
+
+
+
+
+
+
+
+
+
+
+local Tab = Window:CreateTab("Setting/Misc")
+local Sector = Tab:CreateSector("Section1", "left")
+Sector:AddTextbox("Speed" , "16" , function(w)
+    _G.Speed = w
+end)
+Sector:AddTextbox("Jump" , "50" , function(w)
+    _G.Jump = w
+end)
+Sector:AddToggle("WalkSpeed", false, function(t)
+    _G.WalkSpeed = t
+end)
+Sector:AddToggle("JumpPower", false, function(t)
+    _G.JumpPower = t
+end)
+Sector:AddToggle("CtrlClickTP", false, function(t)
+    _G.CtrlClickTP = t
+end)
+Sector:AddButton("Rejoin" , function()
+    game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId, game:GetService("Players").LocalPlayer)
+end)
+Sector:AddButton("HopServer" , function()
+    HopServer()
+end)
+Sector:AddButton("ResetCamera" , function()
+    game:GetService("Workspace").CurrentCamera:Destroy()
+    wait(.1)
+    game:GetService("Workspace").CurrentCamera.CameraSubject = game:GetService("Players").LocalPlayer.Character.Humanoid
+    game:GetService("Workspace").CurrentCamera.CameraType = "Custom"
+    game:GetService("Players").LocalPlayer.CameraMinZoomDistance = .5
+    game:GetService("Players").LocalPlayer.CameraMaxZoomDistance = 100000
+    game:GetService("Players").LocalPlayer.CameraMode = "Classic"
+end)
+Sector:AddButton("InstantProximityPrompt" , function()
+    game:GetService("ProximityPromptService").PromptButtonHoldBegan:Connect(function(prompt)
+        prompt.HoldDuration = 0
+    end)
+end)
+spawn(function()
+    pcall(function()
+        while task.wait() do
+            pcall(function()
+                if _G.WalkSpeed then
+                    pcall(function()
+                        game.Players.LocalPlayer.character.Humanoid.WalkSpeed = tonumber(_G.Speed)
+                    end)
+                end
+            end)
+        end
+    end)
+end)
+spawn(function()
+    pcall(function()
+        while task.wait() do
+            pcall(function()
+                if _G.JumpPower then
+                    pcall(function()
+                        game.Players.LocalPlayer.character.Humanoid.JumpPower = tonumber(_G.Jump)
+                    end)
+                end
+            end)
+        end
+    end)
+end)
+
+local UIS = game:GetService("UserInputService")
+local Player = game.Players.LocalPlayer
+local Mouse = Player:GetMouse()
+function GetCharacter()
+    return game.Players.LocalPlayer.Character
+    end
+    function Teleport(pos)
+    local Char = GetCharacter()
+    if Char then
+        Char:MoveTo(pos)
+    end
+end
+UIS.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 and UIS:IsKeyDown(Enum.KeyCode.LeftControl) and _G.CtrlClickTP == true then
+        Teleport(Mouse.Hit.p)
+    end
+end)
+
+local Sector = Tab:CreateSector("Section2", "Right")
+Sector:AddKeybind("Keybind GUI", "Insert",true, function()
+    for i, v in pairs(game:GetService("CoreGui"):GetChildren()) do
+        if v:FindFirstChild("main") then
+            v.main.Visible = not v.main.Visible;
+        end
+    end
+end)
+Sector:AddToggle("CloseGuiAfterExecute", false, function(o)
+    _G.CloseGuiAfterExecute = o
+end)
+Sector:AddToggle("RejoinAfterKick", false, function(o)
+    _G.rejoinKick = o
+end)
+spawn(function()
+    getgenv().rejoin = game:GetService("CoreGui").RobloxPromptGui.promptOverlay.ChildAdded:Connect(function(Kick)
+        if ((Kick.Name == "ErrorPrompt") and Kick:FindFirstChild("MessageArea") and Kick.MessageArea:FindFirstChild("ErrorFrame")) then
+            if _G.rejoinKick == true then
+                game:GetService("TeleportService"):Teleport(game.PlaceId)
+            end
+        end
+    end)
+end)
+Sector:AddToggle("WhiteScreen", false, function(o)
+    _G.AFKMode = o
+end)
+Sector:AddButton("infiniteyield" , function()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
+end)
+Sector:AddButton("DarkDex" , function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/infyiff/backup/main/dex.lua", true))()
+end)
+Sector:AddButton("RemoteSpy" , function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/SmellLikeHacker/IDK/main/RemoteSpy", true))()
+end)
+Sector:AddButton("CopyDiscordLink" , function()
+    setclipboard("https://discord.gg/48geaWzacy")
+end)
+Sector:AddButton("JoinDiscord" , function()
+    request = http_request or request or HttpPost or syn.request
+    request({Url = "http://127.0.0.1:6463/rpc?v=1",Method = "POST",Headers = {["Content-Type"] = "application/json",["origin"] = "https://discord.com",},Body = game:GetService("HttpService"):JSONEncode({["args"] = {["code"] = "48geaWzacy",},["cmd"] = "INVITE_BROWSER",["nonce"] = "."})})
+end)
+Sector:AddButton("SUPER SECRET BUTTON" , function()
+    local soundId = "rbxassetid://6454805792"
+    local sound = Instance.new("Sound")
+    sound.SoundId = soundId
+    sound.Volume = 10
+    sound.Looped = true
+    sound.Parent = game.Players.LocalPlayer.Character
+    sound:Play()
+end)
+spawn(function()
+    pcall(function()
+        while task.wait() do
+            pcall(function()
+                game:GetService("Players").LocalPlayer.DevCameraOcclusionMode = "Invisicam"
+                game:GetService("Players").LocalPlayer.CameraMaxZoomDistance = 100000
+            end)
+        end
+    end)
+end)
+spawn(function()
+    pcall(function()
+        while wait() do
+            pcall(function()
+                if _G.CloseGuiAfterExecute then
+                    pcall(function()
+                        wait()
+                        for i,v in pairs(game:GetService("CoreGui"):GetChildren()) do
+                            if v:FindFirstChild("main") then
+                                v.main.Visible = not v.main.Visible
+                            end
+                        end
+                        wait(9e9)
+                    end)
+                end
+            end)
+        end
+    end)
+end)
+spawn(function()
+    pcall(function()
+        while wait() do
+            pcall(function()
+                if _G.AFKMode == true then
+                    game:GetService("RunService"):Set3dRenderingEnabled(false)
+                    pcall(function()
+                        setfpscap(20)
+                    end)
+                    repeat wait() until _G.AFKMode == false
+                elseif _G.AFKMode == false then
+                    game:GetService("RunService"):Set3dRenderingEnabled(true)
+                    pcall(function()
+                        setfpscap(60)
+                    end)
+                    repeat wait() until _G.AFKMode == false
+                end
+            end)
+        end
+    end)
+end)
+game:GetService("Players").LocalPlayer.Idled:connect(function()
+    game:GetService("VirtualUser"):CaptureController()
+    game:GetService("VirtualUser"):ClickButton2(Vector2.new())
+end)
+library:ConfigSystem("SakuraStand"):Load()
+while wait(1) do
+    pcall(function()
+        library:ConfigSystem("SakuraStand"):Save()
+    end)
+end
+end
