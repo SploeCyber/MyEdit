@@ -43,6 +43,9 @@ Sector:AddToggle("???", false, function(v)
 end)
 
 local Sector = Tab:CreateSector("Item", "Right")
+Sector:AddToggle("CollectAura", false, function(v)
+    _G.CollectAura = v
+end)
 Sector:AddToggle("AutoCollect", false, function(v)
     _G.Collectitem = v
 end)
@@ -68,6 +71,19 @@ local function getClosestItem()
 				thing = v
 			end
         elseif v.Name ~= "Chest" and v:FindFirstChildWhichIsA("ProximityPrompt").Enabled == true and v.Position.Y > -200 then
+			local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).magnitude
+			if mag < dist then
+				dist = mag 
+				thing = v
+			end
+		end
+	end
+return thing
+end
+local function getClosestItems()
+	local dist, thing = math.huge
+	for i, v in next, workspace.Item:GetChildren() do
+        if v:FindFirstChildWhichIsA("ProximityPrompt").Enabled == true and v.Position.Y > -200 then
 			local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).magnitude
 			if mag < dist then
 				dist = mag 
@@ -153,6 +169,18 @@ spawn(function()
                     elseif (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - getClosestItem().Position).magnitude > getClosestItem():FindFirstChildWhichIsA("ProximityPrompt").MaxActivationDistance+7 then
                         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getClosestItem().CFrame
                     end
+                end)
+			end
+		end
+	end)
+end)
+spawn(function()
+	pcall(function()
+		while wait() do
+			if _G.CollectAura == true then
+                pcall(function()
+                    getClosestItems():FindFirstChildWhichIsA("ProximityPrompt").HoldDuration = 0
+                    fireproximityprompt(getClosestItems():FindFirstChildWhichIsA("ProximityPrompt"))
                 end)
 			end
 		end
