@@ -8,6 +8,10 @@ local Sector = Tab:CreateSector("Section1", "left")
 Sector:AddToggle("Auto UpgradeMastery", false, function(v)
     _G.UpgradeMas = v
 end)
+Sector:AddToggle("Auto Breakthrough", false, function(v)
+    _G.Breakthrough = v
+end)
+
 Sector:AddToggle("Owner ID", false, function(v)
     _G.OwnerID = v
 end)
@@ -170,7 +174,17 @@ spawn(function()
 		end
 	end)
 end)
-
+spawn(function()
+	pcall(function()
+		while wait(1) do
+			if _G.Breakthrough then
+				pcall(function()
+					game:GetService("ReplicatedStorage"):WaitForChild("GlobalUsedRemotes"):WaitForChild("Breakthrough"):FireServer()
+				end)
+			end
+		end
+	end)
+end)
 
 
 
