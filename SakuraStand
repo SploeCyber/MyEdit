@@ -11,12 +11,35 @@ end)
 Sector:AddToggle("Auto Breakthrough", false, function(v)
     _G.Breakthrough = v
 end)
-
-Sector:AddToggle("Owner ID", false, function(v)
-    _G.OwnerID = v
+local Sector = Tab:CreateSector("Section1", "left")
+local dropdownsc = Sector:AddDropdown("Select Skill", {} ,false, true, function(v)
+	_G.Skill = v
 end)
-Sector:AddToggle("Stupid ID", false, function(v)
-    _G.MostTP = v
+Sector:AddButton("Refresh Skill", function()
+    for i, v in pairs(dropdownsc:getList()) do
+        dropdownsc:Remove(tostring(v))
+    end
+    for i,v in pairs(game:GetService("ReplicatedStorage")[game:GetService("Players").LocalPlayer.Data.StandName.Value.."Remote"]:GetChildren()) do
+        if not table.find(dropdownsc:getList(), v.Name) and v.Name ~= "Punch" and v.Name ~= "Pose" and v.Name ~= "Taunt" and v.Name ~= "Block" then
+            dropdownsc:Add(v.Name)
+        end
+    end
+end)
+Sector:AddToggle("Auto Skill", false, function(v)
+    _G.AutoSkill = v
+end)
+Sector:AddToggle("Auto Punch", false, function(v)
+    _G.AutoPunch = v
+end)
+local Sector = Tab:CreateSector("Section1", "left")
+Sector:AddToggle("Leader ID", false, function(v)
+    _G.Leader = v
+end)
+Sector:AddToggle("Guest ID", false, function(v)
+    _G.Guest = v
+end)
+Sector:AddToggle("???", false, function(v)
+    _G.A = v
 end)
 
 local Sector = Tab:CreateSector("Item", "Right")
@@ -64,7 +87,7 @@ spawn(function()
 	pcall(function()
 		while task.wait() do
             pcall(function()
-                if _G.MostTP then
+                if _G.Guest then
                     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-521, -31, 1658)
                 end
             end)
@@ -75,10 +98,33 @@ spawn(function()
 	pcall(function()
 		while task.wait() do
             pcall(function()
-                if _G.OwnerID then
+                if _G.Leader then
                     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-521, -31, 1662)
-                    game:GetService("VirtualInputManager"):SendMouseButtonEvent(1, 1, 0, true, game, 1)
-                    game:GetService("VirtualInputManager"):SendMouseButtonEvent(1, 1, 0, false, game, 1)
+                end
+            end)
+		end
+	end)
+end)
+spawn(function()
+	pcall(function()
+		while wait() do
+            pcall(function()
+                if _G.AutoPunch then
+                    game:GetService("ReplicatedStorage")[game:GetService("Players").LocalPlayer.Data.StandName.Value.."Remote"].Punch:FireServer()
+                end
+            end)
+		end
+	end)
+end)
+spawn(function()
+	pcall(function()
+		while wait() do
+            pcall(function()
+                if _G.AutoSkill == true then
+                    for i,v in pairs(_G.Skill) do
+                        game:GetService("ReplicatedStorage")[game:GetService("Players").LocalPlayer.Data.StandName.Value.."Remote"][v]:FireServer()
+                        wait(0.05)
+                    end
                 end
             end)
 		end
@@ -111,9 +157,7 @@ spawn(function()
                         getClosestItem():FindFirstChildWhichIsA("ProximityPrompt").HoldDuration = 0
                         fireproximityprompt(getClosestItem():FindFirstChildWhichIsA("ProximityPrompt"))
                     elseif (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - getClosestItem().Position).magnitude > getClosestItem():FindFirstChildWhichIsA("ProximityPrompt").MaxActivationDistance+7 then
-                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getClosestItem().CFrame * CFrame.new(0,0,getClosestItem():FindFirstChildWhichIsA("ProximityPrompt").MaxActivationDistance+6)
-                    elseif (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - getClosestItem().Position).magnitude <= getClosestItem():FindFirstChildWhichIsA("ProximityPrompt").MaxActivationDistance+7 then
-                        game:GetService("TweenService"):Create(game.Players.LocalPlayer.Character.HumanoidRootPart,TweenInfo.new((getClosestItem().Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude/tonumber(5), Enum.EasingStyle.Linear),{CFrame = getClosestItem().CFrame}):Play()
+                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getClosestItem().CFrame
                     end
                 end)
 			end
@@ -123,7 +167,7 @@ end)
 spawn(function()
 	pcall(function()
 		while task.wait() do
-			if _G.Collectitem == true then
+			if _G.Collectitem == true or _G.A == true then
                 task.spawn(function()
                     pcall(function()
                         local BeenASecond, V3 = false, Vector3.new(0, 0, 0)
@@ -185,6 +229,89 @@ spawn(function()
 		end
 	end)
 end)
+
+
+
+spawn(function()
+	pcall(function()
+		while wait() do
+			if _G.A then
+				pcall(function()
+					if game.Players.LocalPlayer.Character.CDValues:FindFirstChild("G_Cooldown") then
+                        for i, v in next, workspace.Item:GetChildren() do
+                            if game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Chest Key") and v:FindFirstChildWhichIsA("ProximityPrompt").Enabled == true and v.Position.Y > -200 and game.Players.LocalPlayer.Character.CDValues:FindFirstChild("G_Cooldown") then
+                                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame * CFrame.new(0,5,0)
+                                v:FindFirstChildWhichIsA("ProximityPrompt").HoldDuration = 0
+                                wait(1)
+                                fireproximityprompt(v:FindFirstChildWhichIsA("ProximityPrompt"))
+                                wait(1)
+                            elseif v.Name ~= "Chest" and v:FindFirstChildWhichIsA("ProximityPrompt").Enabled == true and v.Position.Y > -200 and game.Players.LocalPlayer.Character.CDValues:FindFirstChild("G_Cooldown") then
+                                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame * CFrame.new(0,5,0)
+                                v:FindFirstChildWhichIsA("ProximityPrompt").HoldDuration = 0
+                                wait(1)
+                                fireproximityprompt(v:FindFirstChildWhichIsA("ProximityPrompt"))
+                                wait(1)
+                            end
+                        end
+                    elseif not game.Players.LocalPlayer.Character.CDValues:FindFirstChild("G_Cooldown") then
+                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-521, -31, 1662)
+                        wait(1)
+                        game:GetService("VirtualInputManager"):SendKeyEvent(true, "G", false, game.Players.LocalPlayer.Character.HumanoidRootPart)
+                        game:GetService("VirtualInputManager"):SendKeyEvent(false, "G", false, game.Players.LocalPlayer.Character.HumanoidRootPart)
+                        wait(2)
+                    end
+				end)
+			end
+		end
+	end)
+end)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
