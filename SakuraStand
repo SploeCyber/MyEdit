@@ -12,18 +12,8 @@ Sector:AddToggle("Auto Breakthrough", false, function(v)
     _G.Breakthrough = v
 end)
 local Sector = Tab:CreateSector("Section1", "left")
-local dropdownsc = Sector:AddDropdown("Select Skill", {} ,false, true, function(v)
+Sector:AddDropdown("SelectSkill", {"E","R","T","Y","G","H","Q"} ,false, true, function(v)
 	_G.Skill = v
-end)
-Sector:AddButton("Refresh Skill", function()
-    for i, v in pairs(dropdownsc:getList()) do
-        dropdownsc:Remove(tostring(v))
-    end
-    for i,v in pairs(game:GetService("ReplicatedStorage")[game:GetService("Players").LocalPlayer.Data.StandName.Value.."Remote"]:GetChildren()) do
-        if not table.find(dropdownsc:getList(), v.Name) and v.Name ~= "Punch" and v.Name ~= "Pose" and v.Name ~= "Taunt" and v.Name ~= "Block" then
-            dropdownsc:Add(v.Name)
-        end
-    end
 end)
 Sector:AddToggle("Auto Skill", false, function(v)
     _G.AutoSkill = v
@@ -132,8 +122,10 @@ spawn(function()
             pcall(function()
                 if _G.AutoSkill == true then
                     for i,v in pairs(_G.Skill) do
-                        game:GetService("ReplicatedStorage")[game:GetService("Players").LocalPlayer.Data.StandName.Value.."Remote"][v]:FireServer()
-                        wait(0.05)
+                        game:GetService("VirtualInputManager"):SendKeyEvent(true, v, false, game.Players.LocalPlayer.Character.HumanoidRootPart)
+                        wait()
+                        game:GetService("VirtualInputManager"):SendKeyEvent(false, v, false, game.Players.LocalPlayer.Character.HumanoidRootPart)
+                        wait()
                     end
                 end
             end)
