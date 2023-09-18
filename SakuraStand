@@ -110,7 +110,8 @@ spawn(function()
 		while wait() do
             pcall(function()
                 if _G.AutoPunch then
-                    game:GetService("ReplicatedStorage")[game:GetService("Players").LocalPlayer.Data.StandName.Value.."Remote"].Punch:FireServer()
+                    game:GetService("VirtualInputManager"):SendMouseButtonEvent(1, 1, 0, true, game, 1)
+                    game:GetService("VirtualInputManager"):SendMouseButtonEvent(1, 1, 0, false, game, 1)
                 end
             end)
 		end
