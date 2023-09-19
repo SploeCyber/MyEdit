@@ -135,6 +135,37 @@ spawn(function()
 end)
 spawn(function()
 	pcall(function()
+		while task.wait() do
+            pcall(function()
+                if _G.AutoPosition then
+                    if _G.position == "1" then
+                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-585.617004, -34.9928017, 1918.23755, 0.978144467, 0, 0.207926437, 0, 1, 0, -0.207926437, 0, 0.978144467)
+                    elseif _G.position == "2" then
+                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new()
+                    elseif _G.position == "3" then
+
+                    elseif _G.position == "4" then
+
+                    elseif _G.position == "5" then
+
+                    elseif _G.position == "6" then
+
+                    elseif _G.position == "7" then
+
+                    elseif _G.position == "8" then
+
+                    elseif _G.position == "9" then
+                        
+                    elseif _G.position == "10" then
+
+                    end
+                end
+            end)
+		end
+	end)
+end)
+spawn(function()
+	pcall(function()
 		while wait() do
             pcall(function()
                 if game:GetService("Players").LocalPlayer.Data.Played.Value == false then
@@ -448,8 +479,11 @@ spawn(function()
         end
     end)
 end)
-Sector:AddToggle("WhiteScreen", false, function(o)
-    _G.AFKMode = o
+Sector:AddTextbox("FPS" , "20" , function(w)
+    _G.FPS = w
+end)
+Sector:AddToggle("SetFpsCap", false, function(o)
+    _G.Fpscap = o
 end)
 Sector:AddButton("infiniteyield" , function()
     loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
@@ -509,18 +543,9 @@ spawn(function()
     pcall(function()
         while wait() do
             pcall(function()
-                if _G.AFKMode == true then
-                    game:GetService("RunService"):Set3dRenderingEnabled(false)
-                    pcall(function()
-                        setfpscap(20)
-                    end)
-                    repeat wait() until _G.AFKMode == false
-                elseif _G.AFKMode == false then
-                    game:GetService("RunService"):Set3dRenderingEnabled(true)
-                    pcall(function()
-                        setfpscap(60)
-                    end)
-                    repeat wait() until _G.AFKMode == false
+                if _G.Fpscap then
+                    setfpscap(tonumber(_G.FPS))
+                    wait(60)
                 end
             end)
         end
