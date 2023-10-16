@@ -2,7 +2,7 @@ repeat wait() until game:IsLoaded()
 if game.PlaceId == 8534845015 then
 getgenv().HopServer=function()httprequest=(syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or request ;if httprequest then local v1={};local v2=httprequest({Url=string.format("https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Desc&limit=100",game.PlaceId)});local v3=game:GetService("HttpService"):JSONDecode(v2.Body);if (v3 and v3.data) then for v4,v5 in next,v3.data do if ((type(v5)=="table") and tonumber(v5.playing) and tonumber(v5.maxPlayers) and (v5.playing<(v5.maxPlayers-1)) and (v5.id~=JobId)) then table.insert(v1,1,v5.id);end end end if ( #v1>0) then game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId,v1[math.random(1, #v1)],game.Players.LocalPlayer);else return Notification(1,"SmellLikehacker Hub","Couldn't find a server",10);end end end;
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/SmellLikeHacker/IDK/main/GUI56"))()
-local Window = library:CreateWindow("SLH Hub | "..game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name.." | V1.01")
+local Window = library:CreateWindow("SLH Hub | "..game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name.." | V1.02")
 local Tab = Window:CreateTab("Main")
 local Sector = Tab:CreateSector("Section1", "left")
 Sector:AddToggle("Auto UpgradeMastery", false, function(v)
@@ -38,6 +38,9 @@ Sector:AddToggle("CollectAura", false, function(v)
 end)
 Sector:AddToggle("AutoCollect", false, function(v)
     _G.Collectitem = v
+end)
+Sector:AddToggle("Collect Soul", false, function(v)
+    _G.CollectSoul = v
 end)
 local it = {}
 for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui.SellGUI.Outer.Inner.Inner:GetChildren()) do
@@ -179,6 +182,23 @@ spawn(function()
                     wait(.1)
                 end
             end)
+		end
+	end)
+end)
+spawn(function()
+	pcall(function()
+		while wait() do
+			if _G.CollectSoul == true then
+                pcall(function()
+                    for _,v in pairs(workspace.Item2:GetChildren()) do
+                        if v.Name == "SoulSpawn" and v.CFrame ~= CFrame.new(-291.166412, -64.5565033, 1667.29993, 1, 0, 0, 0, 1, 0, 0, 0, 1) then
+                            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame
+                            v:FindFirstChildWhichIsA("ProximityPrompt").HoldDuration = 0
+                            fireproximityprompt(v:FindFirstChildWhichIsA("ProximityPrompt"))
+                        end
+                    end
+                end)
+			end
 		end
 	end)
 end)
@@ -541,11 +561,10 @@ spawn(function()
 end)
 spawn(function()
     pcall(function()
-        while wait() do
+        while wait(1) do
             pcall(function()
                 if _G.Fpscap then
                     setfpscap(tonumber(_G.FPS))
-                    wait(60)
                 end
             end)
         end
