@@ -2,7 +2,7 @@ repeat wait() until game:IsLoaded()
 if game.PlaceId == 8534845015 then
 getgenv().HopServer=function()httprequest=(syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or request ;if httprequest then local v1={};local v2=httprequest({Url=string.format("https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Desc&limit=100",game.PlaceId)});local v3=game:GetService("HttpService"):JSONDecode(v2.Body);if (v3 and v3.data) then for v4,v5 in next,v3.data do if ((type(v5)=="table") and tonumber(v5.playing) and tonumber(v5.maxPlayers) and (v5.playing<(v5.maxPlayers-1)) and (v5.id~=JobId)) then table.insert(v1,1,v5.id);end end end if ( #v1>0) then game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId,v1[math.random(1, #v1)],game.Players.LocalPlayer);else return Notification(1,"SmellLikehacker Hub","Couldn't find a server",10);end end end;
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/SmellLikeHacker/IDK/main/GUI56"))()
-local Window = library:CreateWindow("SLH Hub | "..game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name.." | V1.02")
+local Window = library:CreateWindow("SLH Hub | "..game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name.." | V1.03")
 local Tab = Window:CreateTab("Main")
 local Sector = Tab:CreateSector("Section1", "left")
 Sector:AddToggle("Auto UpgradeMastery", false, function(v)
@@ -54,25 +54,26 @@ end)
 Sector:AddToggle("AutoSellItem", false, function(v)
     _G.AutoSellItem = v
 end)
-local function getClosestItem()
-	local dist, thing = math.huge
-	for i, v in next, workspace.Item:GetChildren() do
-		if _G.AutoChest == true and game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Chest Key") and v:FindFirstChildWhichIsA("ProximityPrompt").Enabled == true and v.Position.Y > -200 then
-			local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).magnitude
-			if mag < dist then
-				dist = mag 
-				thing = v
-			end
-        elseif v.Name ~= "Chest" and v:FindFirstChildWhichIsA("ProximityPrompt").Enabled == true and v.Position.Y > -200 then
-			local mag = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Position).magnitude
-			if mag < dist then
-				dist = mag 
-				thing = v
-			end
-		end
-	end
-return thing
-end
+Sector:AddDropdown("Select Method Soul", {"WorthExchange","CashExchange","TokenExchange"} ,false,  true, function(v)
+    _G.Item = v
+end)
+Sector:AddToggle("AutoBuy", false, function(v)
+    _G.AutoBuy = v
+end)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 local function getClosestItems()
 	local dist, thing = math.huge
 	for i, v in next, workspace.Item:GetChildren() do
@@ -136,31 +137,14 @@ spawn(function()
 		end
 	end)
 end)
+
 spawn(function()
 	pcall(function()
-		while task.wait() do
+		while wait(1) do
             pcall(function()
-                if _G.AutoPosition then
-                    if _G.position == "1" then
-                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-585.617004, -34.9928017, 1918.23755, 0.978144467, 0, 0.207926437, 0, 1, 0, -0.207926437, 0, 0.978144467)
-                    elseif _G.position == "2" then
-                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new()
-                    elseif _G.position == "3" then
-
-                    elseif _G.position == "4" then
-
-                    elseif _G.position == "5" then
-
-                    elseif _G.position == "6" then
-
-                    elseif _G.position == "7" then
-
-                    elseif _G.position == "8" then
-
-                    elseif _G.position == "9" then
-                        
-                    elseif _G.position == "10" then
-
+                if _G.AutoBuy then
+                    for _,v in pairs(_G.Item) do
+                        game:GetService("ReplicatedStorage"):WaitForChild("SoulPurchase"):WaitForChild("Purchase"):FireServer(v)
                     end
                 end
             end)
@@ -191,10 +175,14 @@ spawn(function()
 			if _G.CollectSoul == true then
                 pcall(function()
                     for _,v in pairs(workspace.Item2:GetChildren()) do
-                        if v.Name == "SoulSpawn" and v.CFrame ~= CFrame.new(-291.166412, -64.5565033, 1667.29993, 1, 0, 0, 0, 1, 0, 0, 0, 1) then
-                            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame
-                            v:FindFirstChildWhichIsA("ProximityPrompt").HoldDuration = 0
-                            fireproximityprompt(v:FindFirstChildWhichIsA("ProximityPrompt"))
+                        if v.Name == "SoulSpawn" and v.CFrame ~= CFrame.new(-291.166412, -64.5565033, 1667.29993, 1, 0, 0, 0, 1, 0, 0, 0, 1) and v:FindFirstChildWhichIsA("ProximityPrompt").Enabled == true then
+                            repeat task.wait()
+                                task.spawn(function()
+                                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame
+                                    v:FindFirstChildWhichIsA("ProximityPrompt").HoldDuration = 0
+                                    fireproximityprompt(v:FindFirstChildWhichIsA("ProximityPrompt"))
+                                end)
+                            until not v.Parent or _G.CollectSoul == false or v:FindFirstChildWhichIsA("ProximityPrompt").Enabled == false
                         end
                     end
                 end)
@@ -207,11 +195,36 @@ spawn(function()
 		while wait() do
 			if _G.Collectitem == true then
                 pcall(function()
-                    if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - getClosestItem().Position).magnitude < getClosestItem():FindFirstChildWhichIsA("ProximityPrompt").MaxActivationDistance then
-                        getClosestItem():FindFirstChildWhichIsA("ProximityPrompt").HoldDuration = 0
-                        fireproximityprompt(getClosestItem():FindFirstChildWhichIsA("ProximityPrompt"))
-                    elseif (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - getClosestItem().Position).magnitude > getClosestItem():FindFirstChildWhichIsA("ProximityPrompt").MaxActivationDistance+7 then
-                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getClosestItem().CFrame
+                    for _,v in pairs(workspace.Item:GetChildren()) do
+                        if v:FindFirstChildWhichIsA("ProximityPrompt").Enabled == true and v.Position.Y > -200 then
+                            if workspace.Item:FindFirstChild("Chest") and game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Chest Key") and v.Name == "Chest" then
+                                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame
+                                wait(0.2)
+                                v:FindFirstChildWhichIsA("ProximityPrompt").HoldDuration = 0
+                                fireproximityprompt(v:FindFirstChildWhichIsA("ProximityPrompt"))
+                                v:FindFirstChildWhichIsA("ProximityPrompt").HoldDuration = 0
+                                fireproximityprompt(v:FindFirstChildWhichIsA("ProximityPrompt"))
+                                v:FindFirstChildWhichIsA("ProximityPrompt").HoldDuration = 0
+                                fireproximityprompt(v:FindFirstChildWhichIsA("ProximityPrompt"))
+                                v:FindFirstChildWhichIsA("ProximityPrompt").HoldDuration = 0
+                                fireproximityprompt(v:FindFirstChildWhichIsA("ProximityPrompt"))
+                                v:FindFirstChildWhichIsA("ProximityPrompt").HoldDuration = 0
+                                fireproximityprompt(v:FindFirstChildWhichIsA("ProximityPrompt"))
+                            elseif v.Name ~= "Chest" then
+                                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame
+                                wait(0.2)
+                                v:FindFirstChildWhichIsA("ProximityPrompt").HoldDuration = 0
+                                fireproximityprompt(v:FindFirstChildWhichIsA("ProximityPrompt"))
+                                v:FindFirstChildWhichIsA("ProximityPrompt").HoldDuration = 0
+                                fireproximityprompt(v:FindFirstChildWhichIsA("ProximityPrompt"))
+                                v:FindFirstChildWhichIsA("ProximityPrompt").HoldDuration = 0
+                                fireproximityprompt(v:FindFirstChildWhichIsA("ProximityPrompt"))
+                                v:FindFirstChildWhichIsA("ProximityPrompt").HoldDuration = 0
+                                fireproximityprompt(v:FindFirstChildWhichIsA("ProximityPrompt"))
+                                v:FindFirstChildWhichIsA("ProximityPrompt").HoldDuration = 0
+                                fireproximityprompt(v:FindFirstChildWhichIsA("ProximityPrompt"))
+                            end
+                        end
                     end
                 end)
 			end
@@ -232,33 +245,6 @@ spawn(function()
 end)
 spawn(function()
 	pcall(function()
-		while task.wait() do
-			if _G.Collectitem == true or _G.A == true then
-                task.spawn(function()
-                    pcall(function()
-                        local BeenASecond, V3 = false, Vector3.new(0, 0, 0)
-                        for _, v in ipairs(game.Players.LocalPlayer.Character:GetDescendants()) do
-                            if v.IsA(v, "BasePart") then
-                                v.Velocity, v.RotVelocity = V3, V3
-                            end
-                        end
-                    end)
-                end)
-                task.spawn(function()
-                    pcall(function()
-                        for i,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
-                            if v:IsA("BasePart") then
-                                v.CanCollide = false
-                            end
-                        end
-                    end)
-                end)
-			end
-		end
-	end)
-end)
-spawn(function()
-	pcall(function()
 		while wait() do
 			if _G.AutoSellItem then
 				pcall(function()
@@ -272,7 +258,6 @@ spawn(function()
 		end
 	end)
 end)
-
 spawn(function()
 	pcall(function()
 		while wait(1) do
