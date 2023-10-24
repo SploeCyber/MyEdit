@@ -1,0 +1,126 @@
+repeat wait() until game:IsLoaded()
+if game.PlaceId == 8811271345 or game.PlaceId == 8811375357 or game.PlaceId == 8829364740 or game.PlaceId == 8830255143 or game.PlaceId == 8848036047 or game.PlaceId == 8898827396 or game.PlaceId == 9032150459 or game.PlaceId == 9034159990 or game.PlaceId == 9036392973 or game.PlaceId == 9088363085 or game.PlaceId == 9169451769 or game.PlaceId == 9169452979 or game.PlaceId == 9169455659 or game.PlaceId == 9280551080 or game.PlaceId == 9301650845 or game.PlaceId == 9326753319 or game.PlaceId == 9353614255 or game.PlaceId == 9519390001 or game.PlaceId == 9755250123 or game.PlaceId == 10205913343 or game.PlaceId == 10228957718 or game.PlaceId == 10984614431 or game.PlaceId == 11175531925 or game.PlaceId == 11947222655 or game.PlaceId == 11959131433 or game.PlaceId == 12033513313 or game.PlaceId == 12981871233 then
+function hopserver()local v0=game.PlaceId;local v1={};local v2="";local v3=os.date("!*t").hour;local v4=false;local v5=pcall(function()v1=game:GetService("HttpService"):JSONDecode(readfile("NotSameServers.json"));end);if  not v5 then table.insert(v1,v3);writefile("NotSameServers.json",game:GetService("HttpService"):JSONEncode(v1));end function TPReturner()local v6;if (v2=="") then v6=game.HttpService:JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/"   .. v0   .. "/servers/Public?sortOrder=Asc&limit=100" ));else v6=game.HttpService:JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/"   .. v0   .. "/servers/Public?sortOrder=Asc&limit=100&cursor="   .. v2 ));end local v7="";if (v6.nextPageCursor and (v6.nextPageCursor~="null") and (v6.nextPageCursor~=nil)) then v2=v6.nextPageCursor;end local v8=0;for v9,v10 in pairs(v6.data) do local v11=true;v7=tostring(v10.id);if (tonumber(v10.maxPlayers)>tonumber(v10.playing)) then for v13,v14 in pairs(v1) do if (v8~=0) then if (v7==tostring(v14)) then v11=false;end elseif (tonumber(v3)~=tonumber(v14)) then local v15=pcall(function()delfile("NotSameServers.json");v1={};table.insert(v1,v3);end);end v8=v8 + 1 ;end if (v11==true) then table.insert(v1,v7);wait();pcall(function()writefile("NotSameServers.json",game:GetService("HttpService"):JSONEncode(v1));wait();game:GetService("TeleportService"):TeleportToPlaceInstance(v0,v7,game.Players.LocalPlayer);end);wait(4);end end end end function Teleport()while wait() do pcall(function()TPReturner();if (v2~="") then TPReturner();end end);end end Teleport();end
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/SmellLikeHacker/IDK/main/GUI56"))()
+local Window = library:CreateWindow("SLH Hub | "..game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name.." | Zael Real Gay")
+local Tab1 = Window:CreateTab("Miner")
+local Sector1 = Tab1:CreateSector("AutoMine", "left")
+if game.PlaceId == 9032150459 or game.PlaceId == 8829364740 then
+    Ore = {}
+    for i, v in pairs(workspace.Map.Ores:GetChildren()) do
+        if not table.find(Ore, v.Name) then
+            table.insert(Ore,v.Name)
+        end
+    end
+    Oretabel = {}
+    local dd1 = Sector1:AddDropdown("SelectOre",Ore, false ,true , function(v)
+        Oretabel = v
+    end)
+    Sector1:AddButton("RefreshOre", function()
+        for i, v in pairs(dd1:getList()) do
+            dd1:Remove(tostring(v))
+        end
+        for i, v in pairs(workspace.Map.Ores:GetChildren()) do
+            if not table.find(dd1:getList(), v.Name) then
+                dd1:Add(v.Name)
+            end
+        end
+    end)
+
+    Sector1:AddToggle("AutoMine", false, function(t)
+        _G.AutoMine = t
+    end)
+
+    Sector1:AddButton("Go Lobby", function()
+        game:GetService("TeleportService"):Teleport(8811271345)
+    end)
+    Sector1:AddButton("TheCaverns (Need In Beneath)", function()
+        if game.PlaceId == 9032150459 then
+            firetouchinterest(workspace.Map.ExitTeleporter.pad.TouchInterest, game.Players.LocalPlayer.Character.HumanoidRootPart, 0)
+            firetouchinterest(workspace.Map.ExitTeleporter.pad.TouchInterest, game.Players.LocalPlayer.Character.HumanoidRootPart, 1)
+        else
+            Notification(1, "SmellLikehacker Hub", "Need In Beneath", 10)
+        end
+    end)
+    Sector1:AddButton("Beneath (Need In TheCaverns)", function()
+        if game.PlaceId == 8829364740 then
+            pcall(function()
+                workspace.Map.BeneathTeleporter.RemoteFunction:InvokeServer("Confirm")
+            end)
+        else
+            Notification(1, "SmellLikehacker Hub", "Need In TheCaverns", 10)
+        end
+    end)
+function Mine()
+    task.spawn(function()
+        pcall(function()
+            for i,v in pairs(game:GetService("Players").LocalPlayer.Backpack:GetChildren()) do
+                if string.find(v.Name, "Pickaxe") then
+                    v.Parent = game:GetService("Players").LocalPlayer.Character
+                end
+            end
+            if game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Tool") then
+                for i,v in pairs(game:GetService("Players").LocalPlayer.Character:GetChildren()) do
+                    if v.ClassName == "Tool" then
+                        task.spawn(function()
+                            pcall(function()
+                                v.RemoteFunction:InvokeServer("mine")
+                            end)
+                        end)
+                    end
+                end
+            end
+        end)
+    end)
+end
+
+spawn(function()
+    pcall(function()
+        while wait() do
+            pcall(function()
+                if _G.AutoMine then
+                    for i,v in pairs(workspace.Map.Ores:GetChildren()) do
+                        for a,u in pairs(Oretabel) do
+                            if v.Name == u and v.Base.CFrame.Y < 1250 and v.Base.Transparency == 0 and game.PlaceId == 9032150459 then
+                                repeat task.wait()
+                                    task.spawn(function()
+                                        game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = v.Base.CFrame * CFrame.new(0,0,5)
+                                        Mine()
+                                    end)
+                                until v == nil or v.Parent == nil or _G.AutoMine == false or v.Base.Transparency > 0
+                            elseif v.Name == u and v.Base.CFrame.Y < 75 and v.Base.Transparency == 0 and game.PlaceId == 8829364740 then
+                                repeat task.wait()
+                                    task.spawn(function()
+                                        game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = v.Base.CFrame * CFrame.new(0,0,5)
+                                        Mine()
+                                    end)
+                                until v == nil or v.Parent == nil or _G.AutoMine == false or v.Base.Transparency > 0
+                            end
+                        end
+                    end
+                end
+            end)
+        end
+    end)
+end)
+else
+Sector1:AddSeperator("Need In Cave",true)
+Sector1:AddSeperator("Need In Cave",true)
+Sector1:AddSeperator("Need In Cave",true)
+Sector1:AddSeperator("Need In Cave",true)
+Sector1:AddSeperator("Need In Cave",true)
+Sector1:AddSeperator("Need In Cave",true)
+end
+game:GetService("Players").LocalPlayer.Idled:connect(function()
+    game:GetService("VirtualUser"):CaptureController()
+    game:GetService("VirtualUser"):ClickButton2(Vector2.new())
+end)
+local config = library:ConfigSystem("BalancedCraftwars")
+config:Load()
+while wait(1) do
+    pcall(function()
+        local config = library:ConfigSystem("BalancedCraftwars")
+        config:Save()
+    end)
+end
+end
