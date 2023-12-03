@@ -59,6 +59,12 @@ local function BossThree()
     end
     return thing
 end
+_G.CFramee = CFrame.new(500000, 500000, 500000)
+workspace.ChildAdded:Connect(function(v)
+	if v.Name == "SuperSlash" then
+		_G.CFramee = _G.CFramee * CFrame.new(0,10000,0)
+	end
+end)
 
 spawn(function()
 	pcall(function()
@@ -66,21 +72,21 @@ spawn(function()
 			if _G.AutoWin == true then
 				task.spawn(function()
 					if BossOne() then
-                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(100000, 5000, 100000)
+                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = _G.CFramee
                         if game:GetService("Players").LocalPlayer.PlayerGui.BetterBossHealth.Enabled == true and game:GetService("Players").LocalPlayer.PlayerGui.BetterBossHealth.BossName.Text == "Benedictus, The Saviour" then
                             BossOne():setPrimaryPartCFrame(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame)
                             GetTool()
                             Attack()
                         end
                     elseif BossTwo() then
-                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(100000, 5000, 100000)
+                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = _G.CFramee
                         if game:GetService("Players").LocalPlayer.PlayerGui.BetterBossHealth.Enabled == true and game:GetService("Players").LocalPlayer.PlayerGui.BetterBossHealth.BossName.Text == "Prismatic Benedictus" then
                             BossTwo():setPrimaryPartCFrame(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame)
                             GetTool()
                             Attack()
                         end
                     elseif BossThree() then
-                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(100000, 5000, 100000)
+                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = _G.CFramee
                         if game:GetService("Players").LocalPlayer.PlayerGui.BetterBossHealth.Enabled == true and game:GetService("Players").LocalPlayer.PlayerGui.BetterBossHealth.BossName.Text == "Divine Magelord Benedictus, Radiance Unshackled" then
                             BossThree():setPrimaryPartCFrame(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame)
                             GetTool()
