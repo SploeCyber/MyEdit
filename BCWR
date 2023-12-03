@@ -8,12 +8,12 @@ Sector1:AddToggle("AutoWin", false, function(v)
     _G.AutoWin = v
 end)
 function Attack()
-    if game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool") then
-        game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool"):Activate()
-    end
+    game:GetService("VirtualInputManager"):SendMouseButtonEvent(1, 2, 0, true, game, 1)
+    game:GetService("VirtualInputManager"):SendMouseButtonEvent(1, 2, 0, false, game, 1)
 end
 function GetTool()
     if game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Edge Of Light") then
+        wait(1)
         game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Edge Of Light").Parent = game.Players.LocalPlayer.Character
     end
 end
@@ -67,37 +67,32 @@ spawn(function()
 				task.spawn(function()
 					if BossOne() then
                         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(100000, 5000, 100000)
-                        BossOne():setPrimaryPartCFrame(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame)
-                        GetTool()
-                        Attack()
+                        if game:GetService("Players").LocalPlayer.PlayerGui.BetterBossHealth.Enabled == true and game:GetService("Players").LocalPlayer.PlayerGui.BetterBossHealth.BossName.Text == "Benedictus, The Saviour" then
+                            BossOne():setPrimaryPartCFrame(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame)
+                            GetTool()
+                            Attack()
+                        end
                     elseif BossTwo() then
                         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(100000, 5000, 100000)
-                        BossTwo():setPrimaryPartCFrame(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame)
-                        GetTool()
-                        Attack()
+                        if game:GetService("Players").LocalPlayer.PlayerGui.BetterBossHealth.Enabled == true and game:GetService("Players").LocalPlayer.PlayerGui.BetterBossHealth.BossName.Text == "Prismatic Benedictus" then
+                            BossTwo():setPrimaryPartCFrame(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame)
+                            GetTool()
+                            Attack()
+                        end
                     elseif BossThree() then
                         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(100000, 5000, 100000)
-                        BossThree():setPrimaryPartCFrame(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame)
-                        GetTool()
-                        Attack()
+                        if game:GetService("Players").LocalPlayer.PlayerGui.BetterBossHealth.Enabled == true and game:GetService("Players").LocalPlayer.PlayerGui.BetterBossHealth.BossName.Text == "Divine Magelord Benedictus, Radiance Unshackled" then
+                            BossThree():setPrimaryPartCFrame(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame)
+                            GetTool()
+                            Attack()
+                        end
                     end
 				end)
 			end
 		end
 	end)
 end)
-spawn(function()
-	pcall(function()
-		while task.wait() do
-			if _G.AutoWin then
-				task.spawn(function()
-					game:GetService("VirtualInputManager"):SendMouseButtonEvent(1, 2, 0, true, game, 1)
-                    game:GetService("VirtualInputManager"):SendMouseButtonEvent(1, 2, 0, false, game, 1)
-				end)
-			end
-		end
-	end)
-end)
+
 spawn(function()
 	pcall(function()
 		while task.wait() do
@@ -114,8 +109,6 @@ spawn(function()
 		end
 	end)
 end)
-
-
 
 game:GetService("Players").LocalPlayer.Idled:connect(function()
     game:GetService("VirtualUser"):CaptureController()
