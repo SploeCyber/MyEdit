@@ -74,21 +74,21 @@ spawn(function()
 					if BossOne() then
                         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = _G.CFramee
                         if game:GetService("Players").LocalPlayer.PlayerGui.BetterBossHealth.Enabled == true and game:GetService("Players").LocalPlayer.PlayerGui.BetterBossHealth.BossName.Text == "Benedictus, The Saviour" then
-                            BossOne():setPrimaryPartCFrame(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame)
+                            BossOne():setPrimaryPartCFrame(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame*CFrame.new(0,0,7))
                             GetTool()
                             Attack()
                         end
                     elseif BossTwo() then
                         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = _G.CFramee
                         if game:GetService("Players").LocalPlayer.PlayerGui.BetterBossHealth.Enabled == true and game:GetService("Players").LocalPlayer.PlayerGui.BetterBossHealth.BossName.Text == "Prismatic Benedictus" then
-                            BossTwo():setPrimaryPartCFrame(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame)
+                            BossTwo():setPrimaryPartCFrame(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame*CFrame.new(0,0,7))
                             GetTool()
                             Attack()
                         end
                     elseif BossThree() then
                         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = _G.CFramee
                         if game:GetService("Players").LocalPlayer.PlayerGui.BetterBossHealth.Enabled == true and game:GetService("Players").LocalPlayer.PlayerGui.BetterBossHealth.BossName.Text == "Divine Magelord Benedictus, Radiance Unshackled" then
-                            BossThree():setPrimaryPartCFrame(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame)
+                            BossThree():setPrimaryPartCFrame(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame*CFrame.new(0,0,7))
                             GetTool()
                             Attack()
                         end
