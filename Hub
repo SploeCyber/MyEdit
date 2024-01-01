@@ -1,3 +1,4 @@
+repeat wait() until game:IsLoaded() and pcall(function() local _ = game.HttpGet end);
 if getgenv().AlreadyExecuted then
 	return Notification(1, "SmellLikehacker Hub", "AlreadyExecuted",5)
 end
